@@ -32,11 +32,7 @@ concrete MiniGrammarSpa of MiniGrammar = open MiniResSpa, Prelude in {
       a : NPAgreement ;
       g : Gender
     } ;
-    Det = { 
-      -- should be NGAgr but there was some reason for it not to be
-      s : Gender => Str ; 
-      n : Number 
-    } ;
+    Det = Determiner ;
     Conj = {s : Str} ;
     Prep = {s : Str} ;
     V = Verb ;
@@ -236,37 +232,13 @@ concrete MiniGrammarSpa of MiniGrammar = open MiniResSpa, Prelude in {
       isPron = False
     } ;
 
-    a_Det = {
-      s = table {
-        M => "un" ;
-        F => "una" 
-      } ;
-      n = Sg
-    } ;
+    a_Det = mkDeterminer Sg Ind ;
 
-    aPl_Det = {
-      s = table {
-        M => "unos" ;
-        F => "unas" 
-      } ;
-      n = Pl
-    } ;
+    aPl_Det = mkDeterminer Pl Ind ;
 
-    the_Det = {
-      s = table {
-        M => "el" ;
-        F => "la" -- even though that's another story for "el agua" y "el aguila" (their gender is feminine but their article is masculine)
-      } ;
-      n = Sg
-    } ;
+    the_Det = mkDeterminer Sg Def ;
 
-    thePl_Det = {
-      s = table {
-        M => "los" ;
-        F => "las"
-      } ;
-      n = Pl
-    } ;
+    thePl_Det = mkDeterminer Pl Def ;
 
     {-
     NOTE: one way this grammar is overgenerating is that it accepts/generates
@@ -307,7 +279,8 @@ concrete MiniGrammarSpa of MiniGrammar = open MiniResSpa, Prelude in {
       s = table {
         _ => "cada"
       } ; 
-      n = Sg
+      n = Sg ;
+      d = Def -- TODO: distinguish between articles and other determiners
     } ;
 
     in_Prep = {s = "en"} ;

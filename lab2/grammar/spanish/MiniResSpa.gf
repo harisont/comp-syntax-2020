@@ -15,6 +15,7 @@ param
   -- Mood = Ind | Imp; -- | Sub | Cnd 
   -- Aspect = Perf | Impf ;
   Polarity = Pos | Neg ; -- just for negative imperative
+  Definiteness = Def | Ind ;
 
   NGAgreement = NGAgr Number Gender ; -- used e.g. for noun-adj agreement
   NPAgreement = NPAgr Number Person ; -- used e.g. for verb-subj (pron) agreement
@@ -130,6 +131,36 @@ oper
     haber : Verb = mkVerb "haber" "habido" "he" "has" "ha" "hemos" "habéis" "han" "he" "hayamos" "habed" "hayas" "hayamos" "hayáis" ;
 
     ser : Verb = mkVerb "ser" "sido" "soy" "eres" "es" "somos" "sois" "son" "sé" "seamos" "sed" "seas" "seamos" "seáis" ;
+
+    -- | DETERMINERS (oh well actually articles)
+    Determiner : Type = { 
+      s : Gender => Str ;
+      n : Number ;
+      d : Definiteness 
+    } ;
+
+    mkDeterminer : Number -> Definiteness -> Determiner = \nm, df -> {
+      s = case <nm,df> of {
+        <Sg,Def> => table {
+          M => "el" ;
+          F => "la" -- even though that's another story for "el agua" y "el aguila" (their gender is feminine but their article is masculine)
+        } ;
+        <Sg,Ind> => table {
+          M => "un" ;
+          F => "una" 
+        } ;
+        <Pl,Def> => table {
+          M => "los" ;
+          F => "las"
+        } ;
+        <Pl,Ind> => table {
+          M => "unos" ;
+          F => "unas"
+          }
+        } ;  
+      n = nm ;
+      d = df 
+    } ;
 
     -- | More or less useful helper functions
     negation : Bool -> Str = \b -> case b of {True => [] ; False => "no"} ;
