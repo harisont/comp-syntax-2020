@@ -162,6 +162,90 @@ oper
       d = df 
     } ;
 
+    -- | PRONOUNS
+    Pronoun : Type = { 
+      s : PronForm => Str ; 
+      a : NPAgreement ;
+      g : Gender
+    } ;
+
+    mkPronoun : NPAgreement -> Gender -> Pronoun = \npa, gnd -> {
+      s = case <npa, gnd> of {
+        <(NPAgr Sg P1),_> => table {
+          PForm Nom _ => "yo" ; 
+          PForm Acc _ => "me" ;
+          PForm Dat _ => "me" ;
+          PForm Gen (NGAgr Sg M) => "mío" ;
+          PForm Gen (NGAgr Sg F) => "mía" ;
+          PForm Gen (NGAgr Pl M) => "míos" ;
+          PForm Gen (NGAgr Pl F) => "mías" ;
+          PForm Pre _ => "mí"
+        } ;
+        <(NPAgr Sg P2),_> => table {
+          PForm Nom _ => "tú" ; 
+          PForm Acc _ => "te" ;
+          PForm Dat _ => "te" ;
+          PForm Gen (NGAgr Sg M) => "tuyo" ;
+          PForm Gen (NGAgr Sg F) => "tuya" ;
+          PForm Gen (NGAgr Pl M) => "tuyos" ;
+          PForm Gen (NGAgr Pl F) => "tuyas" ;
+          PForm Pre _ => "ti"
+        } ;
+        <(NPAgr Sg P3),M> => table {
+          PForm Nom _ => "él" ; 
+          PForm Acc _ => "lo" ;
+          PForm Dat _ => "le" ;
+          PForm Gen (NGAgr Sg M) => "suyo" ;
+          PForm Gen (NGAgr Sg F) => "suya" ;
+          PForm Gen (NGAgr Pl M) => "suyos" ;
+          PForm Gen (NGAgr Pl F) => "suyas" ;
+          PForm Pre _ => "se"
+        } ;
+        <(NPAgr Sg P3),F> => table {
+          PForm Nom _ => "ella" ; 
+          PForm Acc _ => "la" ;
+          PForm Dat _ => "le" ;
+          PForm Gen (NGAgr Sg M) => "suyo" ;
+          PForm Gen (NGAgr Sg F) => "suya" ;
+          PForm Gen (NGAgr Pl M) => "suyos" ;
+          PForm Gen (NGAgr Pl F) => "suyas" ; 
+          PForm Pre _ => "se"
+        } ;
+        <(NPAgr Pl P1),_> => table { -- actually missing "nosotras"
+          PForm Nom _ => "nosotros" ;
+          PForm Acc _ => "nos" ;
+          PForm Dat _ => "nos" ;
+          PForm Gen (NGAgr Sg M) => "nuestro" ;
+          PForm Gen (NGAgr Sg F) => "nuestra" ;
+          PForm Gen (NGAgr Pl M) => "nuestros" ;
+          PForm Gen (NGAgr Pl F) => "nuestras" ;
+          PForm Pre _ => "nosotros"
+        } ;
+        <(NPAgr Pl P2),_> => table { -- actually missing "vosotras"
+          PForm Nom _ => "vosotros" ;
+          PForm Acc _ => "os" ;
+          PForm Dat _ => "os" ;
+          PForm Gen (NGAgr Sg M) => "vuestro" ;
+          PForm Gen (NGAgr Sg F) => "vuestra" ;
+          PForm Gen (NGAgr Pl M) => "vuestros" ;
+          PForm Gen (NGAgr Pl F) => "vuestras" ; 
+          PForm Pre _ => "vosotros"
+        } ;
+        <(NPAgr Pl P3),_> => table { -- actually missing "ellas"
+          PForm Nom _ => "ellos" ;
+          PForm Acc _ => "los" ;
+          PForm Dat _ => "les" ;
+          PForm Gen (NGAgr Sg M) => "suyo" ;
+          PForm Gen (NGAgr Sg F) => "suya" ;
+          PForm Gen (NGAgr Pl M) => "suyos" ;
+          PForm Gen (NGAgr Pl F) => "suyas" ;
+          PForm Pre _ => "se"
+        }
+      } ;
+      a = npa ;
+      g = gnd
+    } ;
+
     -- | More or less useful helper functions
     negation : Bool -> Str = \b -> case b of {True => [] ; False => "no"} ;
 
